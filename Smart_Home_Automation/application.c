@@ -26,14 +26,14 @@ int main()
 
 	for(;;)
 	{
-		if (FlameSensor_getValue() == LOGIC_HIGH)
+		if (FlameSensor_getValue() == LOGIC_HIGH) /* Critical condition check */
 		{
 			LCD_clearScreen();
 			LCD_displayString("Critical alert!");
 
 			BUZZER_on();
 
-			while (FlameSensor_getValue() == LOGIC_HIGH);
+			while (FlameSensor_getValue() == LOGIC_HIGH); /* Polling until the critical condition is cleared */
 
 			BUZZER_off();
 
@@ -43,8 +43,7 @@ int main()
 			LCD_displayStringRowColumn(1, 8, "LDR=   %");
 		}
 
-		Temperature = LM35_getTemperature();
-		LightIntensity = LDR_getLightIntensity();
+		Temperature = LM35_getTemperature(); /* Temperature check */
 
 		LCD_moveCursor(1, 5);
 		if (Temperature >= 0 && Temperature < 100)
@@ -83,6 +82,8 @@ int main()
 			LCD_displayStringRowColumn(0, 11, "ON ");
 		}
 
+		LightIntensity = LDR_getLightIntensity(); /* Light intensity check */
+
 		LCD_moveCursor(1, 12);
 		if (LightIntensity == 100)
 		{
@@ -99,7 +100,7 @@ int main()
 			LCD_integerToString(LightIntensity);
 		}
 
-		if (LightIntensity > 70)
+		if (LightIntensity > 70) /* LEDs control */
 		{
 			LED_off(RED_LED);
 			LED_off(GREEN_LED);
